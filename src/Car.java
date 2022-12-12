@@ -1,11 +1,11 @@
 public class Car {
 
-    String brand;
-    String model;
-    String color;
-    String country;
-    double engineVolume;
-    int year;
+    public String brand;
+    public String model;
+    public String color;
+    public String country;
+    public double engineVolume;
+    public int year;
 
     public Car(String brand, String model, double engineVolume, String color, String country, int year) {
 
