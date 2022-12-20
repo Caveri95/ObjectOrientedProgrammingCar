@@ -1,58 +1,26 @@
 package Transport;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
-public class Car {
-
-    private final String brand;
-    private final String model;
-    private String color;
-    private final String country;
-    private double engineVolume;
-    private final int year;
+public class Car extends Transport {
     private String gearBox;
     private final String bodyType;
-    private  String registrationNumber;
+    private String registrationNumber;
     private final int numberOfSeats;
+    private double engineVolume;
     private boolean WinterTyre;
     private Key key;
     private Insurance insurance;
 
     public Car(String brand, String model, double engineVolume, String color, String country, int year, String gearBox,
-               String bodyType, String registrationNumber, int numberOfSeats, boolean winterTyre, Key key, Insurance insurance) {
-
-        if (brand != null && !brand.isEmpty() && !brand.isBlank()) {
-            this.brand = brand;
-        } else {
-            this.brand = "default";
-        }
-
-        if (model != null && !model.isEmpty() && !model.isBlank()) {
-            this.model = model;
-        } else {
-            this.model = "default";
-        }
+               String bodyType, String registrationNumber, int numberOfSeats, boolean winterTyre, Key key, Insurance insurance, int maxSpeed) {
+        super(brand, model, country, year, color, maxSpeed);
 
         if (engineVolume > 0) {
             this.engineVolume = engineVolume;
         } else {
             this.engineVolume = 1.5;
-        }
-
-        if (color != null && !color.isEmpty() && !color.isBlank()) {
-            this.color = color;
-        } else {
-            this.color = "белый";
-        }
-        if (country != null && !country.isEmpty() && !country.isBlank()) {
-            this.country = country;
-        } else {
-            this.country = "default";
-        }
-        if (year >= 0) {
-            this.year = year;
-        } else {
-            this.year = 0;
         }
         if (gearBox != null && !gearBox.isEmpty() && !gearBox.isBlank()) {
             this.gearBox = gearBox;
@@ -74,7 +42,7 @@ public class Car {
         } else {
             this.numberOfSeats = 5;
         }
-        WinterTyre = winterTyre;
+        this.WinterTyre = winterTyre;
         if (key != null) {
             this.key = key;
         } else {
@@ -85,52 +53,36 @@ public class Car {
         } else {
             this.insurance = new Insurance();
         }
-
-    }
-    public Car(String brand,
-               String model,
-               double engineVolume,
-               String color,
-               String country,
-               int year
-               ) {
-        this(brand,
-                model,
-                engineVolume,
-                color, country,
-                year,
-                "МКПП",
-                "данных нет",
-                "х000хх000",
-                5,
-                true,
-                new Key(),
-                new Insurance());
     }
 
     public static class Key {
         private final boolean autorunEngine;
         private final boolean freeKey;
+
         public Key(boolean autorunEngine, boolean freeKey) {
             this.autorunEngine = autorunEngine;
             this.freeKey = freeKey;
         }
+
         public Key() {
             this(false, false);
         }
+
         public boolean isAutorunEngine() {
             return autorunEngine;
         }
+
         public boolean isFreeKey() {
             return freeKey;
         }
 
         @Override
         public String toString() {
-            return  "автозапуск - " + autorunEngine +
+            return "автозапуск - " + autorunEngine +
                     ", бесключевой доступ - " + freeKey;
         }
     }
+
     public static class Insurance {
         private final LocalDate endsOfInsurance;
         private final double costOfInsurance;
@@ -149,6 +101,7 @@ public class Car {
                 this.numberOfInsurance = "000000000";
             }
         }
+
         public Insurance() {
             this(null, 0, "000000000");
         }
@@ -170,52 +123,43 @@ public class Car {
                 System.out.println("Нужно срочно ехать оформлять новую страховку");
             }
         }
+
         public void chekNumberInsurance() {
             if (numberOfInsurance.length() != 9) {
                 System.out.println("Номер страховки некорректный!");
             }
         }
+
         @Override
         public String toString() {
-            return  "Страховка закончит свое действие - " + endsOfInsurance +
+            return "Страховка закончит свое действие - " + endsOfInsurance +
                     ", стоимость страховки - " + costOfInsurance +
                     ", номер страхового полиса - " + numberOfInsurance;
         }
     }
     @Override
     public String toString() {
-        return  "марка - " + brand +
-                ", модель - " + model +
-                ", цвет кузова - " + color +
-                ", страна сборки - " + country +
+        return  "марка - " + getBrand() +
+                ", модель - " + getModel()+
+                ", цвет кузова - " + getColor() +
+                ", страна сборки - " + getCountry() +
                 ", объем двигателя - " + engineVolume + "л." +
-                ", год выпуска - " + year +
+                ", год выпуска - " + getYear() +
                 ", тип коробки передач - " + gearBox +
                 ", тип кузова - " + bodyType +
                 ", государственный регистрационный знак - " + registrationNumber +
                 ", количесвто посадочных мест - " + numberOfSeats +
                 ", зимняя резина - " + isWinterTyre() +
-                "  " + getKey() +
-                "  " + getInsurance();
+                " " + getKey() +
+                " " + getInsurance() +
+                ", максимальная скорость - " + getMaxSpeed();
     }
-    public String getBrand() {
-        return brand;
-    }
-    public String getModel() {
-        return model;
-    }
-    public String getColor() {
-        return color;
-    }
-    public String getCountry() {
-        return country;
-    }
+
+
     public double getEngineVolume() {
         return engineVolume;
     }
-    public int getYear() {
-        return year;
-    }
+
     public String getGearBox() {
         return gearBox;
     }
@@ -242,10 +186,6 @@ public class Car {
     public void setKey(Key key) {
         this.key = key;
     }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
     public void setEngineVolume(double engineVolume) {
         if (engineVolume > 0) {
             this.engineVolume = engineVolume;
@@ -260,14 +200,53 @@ public class Car {
             this.gearBox = "данных нет";
         }
     }
+
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
     }
+
     public void setWinterTyre(boolean winterTyre) {
-        WinterTyre = winterTyre;
+        this.WinterTyre = winterTyre;
     }
     public boolean isWinterTyre() {
         return WinterTyre;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Car)) return false;
+        Car car = (Car) o;
+        return Double.compare(car.engineVolume, engineVolume) == 0 &&
+                getYear() == car.getYear() &&
+                numberOfSeats == car.numberOfSeats &&
+                WinterTyre == car.WinterTyre &&
+                Objects.equals(getBrand(), car.getBrand()) &&
+                Objects.equals(getModel(), car.getModel()) &&
+                Objects.equals(getColor(), car.getColor()) &&
+                Objects.equals(getCountry(), car.getCountry()) &&
+                Objects.equals(gearBox, car.gearBox) &&
+                Objects.equals(bodyType, car.bodyType) &&
+                Objects.equals(registrationNumber, car.registrationNumber) &&
+                Objects.equals(key, car.key) &&
+                Objects.equals(insurance, car.insurance) &&
+                Objects.equals(getMaxSpeed(), car.getMaxSpeed());
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBrand(),
+                getModel(),
+                getColor(),
+                getCountry(),
+                engineVolume,
+                getYear(),
+                gearBox,
+                bodyType,
+                registrationNumber,
+                numberOfSeats,
+                WinterTyre,
+                key,
+                insurance,
+                getMaxSpeed());
     }
 }
 
